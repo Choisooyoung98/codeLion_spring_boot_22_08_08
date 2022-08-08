@@ -1,8 +1,13 @@
 package com.ll.exam.sbb;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -38,26 +43,26 @@ public class MainController {
 
     @GetMapping("plus")
     @ResponseBody
-    public int plus(@RequestParam(defaultValue = "a, b값을 입력해주세요")int a, int b){
+    public int showplus(@RequestParam(defaultValue = "a, b값을 입력해주세요")int a, int b){
         return a + b;
     }
 
     @GetMapping("minus")
     @ResponseBody
-    public int minus(@RequestParam(defaultValue = "a, b값을 입력해주세요")int a, int b){
+    public int showminus(@RequestParam(defaultValue = "a, b값을 입력해주세요")int a, int b){
         return a - b;
     }
 
     @GetMapping("/increase")
     @ResponseBody
-    public int increase() {
+    public int showincrease() {
         ++id;
         return id;
     }
 
     @GetMapping("/gugudan")
     @ResponseBody
-    public String gugudan(Integer dan, Integer limit) {
+    public String showgugudan(Integer dan, Integer limit) {
         if (dan == null) {
             dan = 9;
         }
@@ -70,6 +75,39 @@ public class MainController {
                 .collect(Collectors.joining("<br>"));
     }
 
-    //@GetMapping("/mbti")
+    @GetMapping("/mbti/{name}")
+    @ResponseBody
+    public String showmbti(@PathVariable String name) {
+        if (name == null) {
+            name = "최수용";
+        }
+        String mbti = switch (name) {
+            case "홍길동" -> "INFJ";
+            case "홍길순" -> "ENTJ";
+            case "최수용" -> "INFP";
+            case "임꺽정" -> "ENTJ";
+            default -> "모름";
+        };
+        return mbti;
+    }
+
+    @GetMapping("/saveSession/{name}/{value}")
+    @ResponseBody
+    public String saveSession(@PathVariable String name, @PathVariable String value, HttpServletRequest req) {
+        HttpSession session = req.getSession();
+
+        session.setAttribute(name, value);
+
+        return "세션변수 %s의 값이 %s(으)로 설정되었습니다.".formatted(name,value);
+    }
+
+    @GetMapping("/getSession/{name}")
+    @ResponseBody
+    public String getSesseion(@PathVariable String name, HttpServletRequest session) {
+        String value = (String) session.getAttribute(name);
+
+        return "세션변수 %s의 값이 %s 입니다.".formatted(name, value);
+    }
 
 }
+
