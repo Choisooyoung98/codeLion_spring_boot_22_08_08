@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,5 +23,10 @@ public class Question {
     private String content;
 
     private LocalDateTime createDate;
+
+    // 테이블에 생기지 않는다. 속성값이다.
+    // 이 질문이 삭제될 시 답변을 모두 삭제한다.
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    private List<Answer> answerList;
 
 }
