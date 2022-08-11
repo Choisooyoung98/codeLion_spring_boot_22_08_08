@@ -1,5 +1,6 @@
 package com.ll.exam.sbb;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,9 +18,16 @@ class SbbApplicationTests {
 	@Autowired
 	private QuestionRepository questionRepository;
 
+	@BeforeEach
+
 	@Test
 	void contextLoads() {
 
+	}
+
+	@Test
+	void truncateTest() {
+		questionRepository.truncate();
 	}
 
 	@Test
@@ -90,4 +98,5 @@ class SbbApplicationTests {
 
 		assertEquals(1, this.questionRepository.count());
 	}
+
 }
