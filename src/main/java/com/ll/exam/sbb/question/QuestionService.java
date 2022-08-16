@@ -18,13 +18,17 @@ public class QuestionService {
     }
 
     public Question getQuestion(int id) {
-        Optional<Question> oq = questionRepository.findById(id);
+        return questionRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("no %d question not found".formatted(id))); // 만약에 없으면 예외를 발생시켜라
 
-        // return oq.orElseThrow(DataNotFoundException); // 만약에 없으면 예외를 발생시켜라
+        /*
+        기존 방식
+        Optional<Question> oq = questionRepository.findById(id);
 
         if (oq.isPresent()) {
             return oq.get();
         }
         throw new DataNotFoundException("question not found"); // 실행이 되면 더 이상 진행하지 못함
+        */
     }
 }
