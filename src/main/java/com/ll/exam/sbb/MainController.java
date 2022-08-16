@@ -21,6 +21,11 @@ import java.util.stream.IntStream;
 public class MainController {
     private int increaseNo = -1;
 
+    @RequestMapping("/")
+    public String root() {
+        return "redirect:/question/list";
+    }
+
     @RequestMapping("/sbb")
     // 아래 함수의 리턴값을 그대로 브라우저에 표시
     // 아래 함수의 리턴값을 문자열화 해서 브라우저 응답의 바디에 담는다.

@@ -28,7 +28,7 @@ public class Question {
 
     // 테이블에 생기지 않는다. 속성값이다.
     // 이 질문이 삭제될 시 답변을 모두 삭제한다.
-    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answerList = new ArrayList<>();
 
     public void addAnswer(Answer answer) {
