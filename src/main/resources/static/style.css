@@ -4,12 +4,7 @@
     font-weight: normal;
     font-style: normal;
 }
-
-textarea {
-    width:100%;
+html > body {
+    font-family: 'GmarketSansMedium';
+    text-underline-position: under;
 }
-
-button[type=submit] {
-    margin-top:10px;
-}
-
