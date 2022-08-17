@@ -3,18 +3,27 @@ package com.ll.exam.sbb.question;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/question")
 @Controller
-@RequiredArgsConstructor //생성자 주입
+@RequiredArgsConstructor // 생성자 주입
+// 컨트롤러는 Repository가 있는지 몰라야 한다.
+// 서비스는 웹브라우저라는것이 이 세상에 존재하는지 몰라야 한다.
+// 리포지터리는 서비스를 몰라야 한다.
+// 서비스는 컨트롤러를 몰라야 한다.
+// DB는 리포지터리를 몰라야 한다.
+// SPRING DATA JPA는 MySQL을 몰라야 한다.
+// SPRING DATA JPA(리포지터리) -> JPA -> 하이버네이트 -> JDBC -> MySQL Driver -> MySQL
 public class QuestionController {
-    //@Autowired 필드 주입
+    // @Autowired // 필드 주입
     private final QuestionService questionService;
 
     @RequestMapping("/list")
@@ -33,18 +42,23 @@ public class QuestionController {
     public String detail(Model model, @PathVariable int id) {
         Question question = questionService.getQuestion(id);
 
-        model.addAttribute(question);
+        model.addAttribute("question", question);
+
         return "question_detail";
     }
 
     @GetMapping("/create")
-    public String questionCreate() {
+    public String questionCreate(QuestionForm questionForm) {
         return "question_form";
     }
 
     @PostMapping("/create")
-    public String questionCreate(String subject, String content) {
-        questionService.create(subject, content);
-        return "redirect:/question/list";
+    public String questionCreate(Model model, @Valid QuestionForm questionForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "question_form";
+        }
+
+        questionService.create(questionForm.getSubject(), questionForm.getContent());
+        return "redirect:/question/list"; // 질문 저장후 질문목록으로 이동
     }
 }
