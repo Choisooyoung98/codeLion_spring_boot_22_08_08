@@ -1,6 +1,9 @@
 package com.ll.exam.sbb.user;
 
+import com.ll.exam.sbb.SignupEmailDuplicatedException;
+import com.ll.exam.sbb.SignupUsernameDuplicatedException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +21,15 @@ public class UserService {
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
-        this.userRepository.save(user);
+        try {
+            userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            if (userRepository.existsByUsername(username)) {
+                throw new SignupUsernameDuplicatedException("이미 사용중인 username 입니다.");
+            } else {
+                throw new SignupEmailDuplicatedException("이미 사용중인 email 입니다.");
+            }
+        }
         return user;
     }
 }
