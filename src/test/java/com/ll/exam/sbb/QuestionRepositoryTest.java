@@ -19,14 +19,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 class QuestionRepositoryTest {
     @Autowired
     private QuestionRepository questionRepository;
-    private static int lastSampleDataId;
+    private static long lastSampleDataId;
     @BeforeEach
     void beforeEach() {
         clearData();
         createSampleData();
     }
 
-    public static int createSampleData(QuestionRepository questionRepository) {
+    public static Long createSampleData(QuestionRepository questionRepository) {
         Question q1 = new Question();
         q1.setSubject("sbb가 무엇인가요?");
         q1.setContent("sbb에 대해서 알고 싶습니다.");
@@ -42,7 +42,7 @@ class QuestionRepositoryTest {
     }
 
     private void createSampleData() {
-        lastSampleDataId = createSampleData(questionRepository);
+        lastSampleDataId =createSampleData(questionRepository);
     }
 
     public static void clearData(QuestionRepository questionRepository) {
@@ -72,16 +72,16 @@ class QuestionRepositoryTest {
     @Test
     void 삭제() {
         assertThat(questionRepository.count()).isEqualTo(lastSampleDataId);
-        Question q = this.questionRepository.findById(1).get();
+        Question q = this.questionRepository.findById(1L).get();
         questionRepository.delete(q);
         assertThat(questionRepository.count()).isEqualTo(lastSampleDataId - 1);
     }
     @Test
     void 수정() {
-        Question q = this.questionRepository.findById(1).get();
+        Question q = this.questionRepository.findById(1L).get();
         q.setSubject("수정된 제목");
         questionRepository.save(q);
-        q = this.questionRepository.findById(1).get();
+        q = this.questionRepository.findById(1L).get();
         assertThat(q.getSubject()).isEqualTo("수정된 제목");
     }
     @Test
@@ -111,7 +111,7 @@ class QuestionRepositoryTest {
     @Test
     void findAllPageable() {
         // Pageble : 한 페이지에 몇개의 아이템이 나와야 하는지 + 현재 몇 페이지인지)
-        Pageable pageable = PageRequest.of(0, lastSampleDataId);
+        Pageable pageable = PageRequest.of(0, (int) lastSampleDataId);
         Page<Question> page = questionRepository.findAll(pageable);
 
         assertThat(page.getTotalPages()).isEqualTo(1);

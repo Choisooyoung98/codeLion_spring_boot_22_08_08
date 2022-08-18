@@ -27,7 +27,7 @@ public class QuestionService {
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts)); // 한 페이지에 10까지 가능
         return this.questionRepository.findAll(pageable);
     }
-    public Question getQuestion(int id) {
+    public Question getQuestion(Long id) {
         return questionRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("no %d question not found".formatted(id))); // 만약에 없으면 예외를 발생시켜라
 
