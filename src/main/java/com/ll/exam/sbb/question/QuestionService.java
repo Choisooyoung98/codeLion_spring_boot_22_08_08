@@ -1,6 +1,7 @@
 package com.ll.exam.sbb.question;
 
 import com.ll.exam.sbb.DataNotFoundException;
+import com.ll.exam.sbb.user.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,11 +42,29 @@ public class QuestionService {
         */
     }
 
-    public void create(String subject, String content) {
+    public void create(String subject, String content, SiteUser siteUser) {
         Question question = new Question();
         question.setSubject(subject);
         question.setContent(content);
         question.setCreateDate(LocalDateTime.now());
+        question.setAuthor(siteUser);
+        questionRepository.save(question);
+    }
+
+    public void modify(Question question, String subject, String content) {
+        question.setSubject(subject);
+        question.setContent(content);
+        question.setModifyDate(LocalDateTime.now());
+        this.questionRepository.save(question);
+    }
+
+    public void delete(Question question) {
+        questionRepository.delete(question);
+    }
+
+    public void vote(Question question, SiteUser siteUser) {
+        question.getVoter().add(siteUser);
+
         questionRepository.save(question);
     }
 }
