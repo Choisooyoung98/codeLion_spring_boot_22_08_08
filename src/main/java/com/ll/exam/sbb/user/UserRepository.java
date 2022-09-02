@@ -1,6 +1,7 @@
 package com.ll.exam.sbb.user;
 
 import com.ll.exam.sbb.base.RepositoryUtil;
+import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +19,8 @@ public interface UserRepository extends JpaRepository<SiteUser, Long>, Repositor
     @Modifying
     @Query(value = "ALTER TABLE site_user AUTO_INCREMENT = 1", nativeQuery = true)
     void truncate();
+
+    SiteUser findById(long l);
+
+    SiteUser findByEmail(String admin);
 }
